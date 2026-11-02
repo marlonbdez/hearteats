@@ -9,6 +9,8 @@ export type Loaded<T> =
 
 // Carga datos de la API en el navegador. Los argumentos tienen que poder
 // serializarse: cuando cambian, vuelve a cargar. `retry` repite tras un fallo.
+// `load` tiene que ser una función estable (definida fuera del componente): si
+// cambia en cada pintado, vuelve a cargar sin parar.
 export function useLoad<T, A extends unknown[]>(
   load: (...args: A) => Promise<T>,
   ...args: A
