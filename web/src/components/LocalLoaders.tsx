@@ -14,13 +14,16 @@ import { Remote } from './Remote';
 import { RestaurantDetail } from './RestaurantDetail';
 import styles from './Remote.module.css';
 
+// Fuera del componente a propósito: useLoad vuelve a cargar cuando cambia la
+// función, y una definida dentro sería nueva en cada pintado, con lo que no
+// pararía de pedir el local a la API.
+const loadRestaurant = (slug: string | null) =>
+  slug ? getRestaurant(slug) : Promise.resolve(null);
+
 // El local de la dirección (/place/<slug>), o un aviso si no existe.
 function useRestaurant() {
   const slug = useSlug();
-  const state = useLoad(
-    (s: string | null) => (s ? getRestaurant(s) : Promise.resolve(null)),
-    slug,
-  );
+  const state = useLoad(loadRestaurant, slug);
   return slug ? state : ({ status: 'loading' } as const);
 }
 
